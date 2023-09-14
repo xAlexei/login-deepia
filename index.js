@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT;
 
 var corsOptions = {
-    origin: "https://cripto-mocha.vercel.app/"
+    origin: "https://tradia.online/"
   };
   app.use(cors(corsOptions));
   app.use(bodyParser.json({
