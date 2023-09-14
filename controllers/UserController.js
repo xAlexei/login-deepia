@@ -40,7 +40,7 @@ module.exports = {
 
     login: async (req, res) =>{
         try{
-            
+            res.header("Access-Control-Allow-Origin", "*");
             let user = await UserModel.findOne({ username: req.body.username});
             if(!user) return res.json({ success: false, result: "Could not find username"});
 
@@ -58,7 +58,9 @@ module.exports = {
                 token,
                 expiresIn: process.env.EXPIRE_SECRET,
             })
-                     
+
+            
+
         }catch (error){
             res.json({ 
                 message: "Error",
