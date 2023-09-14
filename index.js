@@ -9,25 +9,18 @@ mongoose.set('strictQuery', true);
 const app = express();
 const port = process.env.PORT;
 
-var corsOptions = {
-    origin: "https://tradia.online/"
-  };
-  app.use(cors(corsOptions));
-  app.use(bodyParser.json({
-    limit: '50mb'
-  }))
-
-  app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Origin', ['*']);
-    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
-app.use(morgan('dev'));
+const whiteList = ["https://tradia.online","https://tradia.online/","https://tradia.online/pages/login"]
 
 db.connect();
-app.use(express.json());
+app.use(morgan('dev'));
+app.use(cors({
+  origin: whiteList
+}));
+app.use(bodyParser.json({
+  limit: '50mb'
+}))
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 
 const UserRoute = require("./routes/UserRoute.js");
