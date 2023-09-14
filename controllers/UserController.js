@@ -2,14 +2,15 @@ const UserModel = require("../models/UserModel");
 require("dotenv").config({ path: "../.env" });
 const jwt = require('jsonwebtoken');
 
+
 module.exports = {
     create: async(req, res) =>{
-        console.log(req.body);
-        try{
+        try{            
+            let { name, username, password } = req.body;
             let User = new UserModel({
-                name: req.body.name,
-                username: req.body.username,
-                password: req.body.password
+                name, 
+                username,
+                password
             })
             await User.save()
             .then(result =>{
@@ -39,10 +40,9 @@ module.exports = {
     },
 
     login: async (req, res) =>{
-        try{
-            res.header("Access-Control-Allow-Origin", "*");
-            let user = await UserModel.findOne({ username: req.body.username});
-            if(!user) return res.json({ success: false, result: "Could not find username"});
+        try{            
+            let user = await UserModel.findOne({ username: req.body.username});            
+            if(!user) return res.json({ success: false, result: "Could not find username"});            
 
             let validPass = await UserModel.findOne({ password: req.body.password});
             if(!validPass) return res.json({ success: false, result: "Invalid Password" });               
@@ -57,9 +57,7 @@ module.exports = {
                 id: user._id,
                 token,
                 expiresIn: process.env.EXPIRE_SECRET,
-            })
-
-            
+            })            
 
         }catch (error){
             res.json({ 
